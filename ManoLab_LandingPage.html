@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ManoLab - AI가 당신을 대신합니다.</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        // Updated color palette to match the provided image
+                        primary: '#4F46E5', // Darker, more vibrant blue for main accents
+                        secondary: '#3730A3', // A slightly darker shade of primary for hover/active states
+                        accent: '#818CF8',   // Lighter shade of primary
+                        background: '#F9FAFB', // Light gray background
+                        card: '#FFFFFF',     // White for cards and header background
+                        text_primary: '#1A202C', // Very dark gray, almost black for main text and logo
+                        text_secondary: '#6B7280', // Medium gray for secondary text like nav links
+                        // Custom colors derived from image_063d1f.png and image_0639f5.png
+                        signup_bg_light_blue: '#E0E8F8', // Background for "Ready to reclaim your time?" section
+                        signup_button_blue: '#5B75E5', // For the sign-up button
+                        signup_bonus_yellow: '#FFFBE6', // For the early access bonus box
+                        signup_bonus_text: '#9C6F00', // For text in the early access bonus box
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F9FAFB; /* Light gray background */
+        }
+        /* Custom styles for the demo simulation area */
+        .simulation-box {
+            min-height: 120px;
+            background-color: #F3F4F6;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #6B7280;
+            font-size: 0.95rem;
+            transition: background-color 0.3s ease;
+        }
+        .simulation-box.active {
+            background-color: #E5E7EB;
+        }
+        .animate-bounce-custom {
+            animation: bounce-custom 1s infinite;
+        }
+        @keyframes bounce-custom {
+            0%, 100% {
+                transform: translateY(-25%);
+                animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+            }
+            50% {
+                transform: translateY(0);
+                animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+            }
+        }
+        /* Custom style for video background (if added later) */
+        .hero-background-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            opacity: 0.2; /* Lighter opacity as requested */
+        }
+        /* Style for step indicators - updated to match image_062691.png */
+        .step-indicator {
+            background-color: #E5E7EB; /* Gray-200 equivalent */
+            color: #1F2937; /* Darker text for contrast */
+            font-weight: 600; /* semibold */
+            padding: 0.5rem 1.25rem;
+            border-radius: 0.5rem; /* rounded-lg */
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="text-text_primary">
+
+    <!-- Navigation Bar -->
+    <header class="bg-card shadow-sm fixed top-0 left-0 right-0 z-50">
+        <nav class="container mx-auto px-4 py-4 flex items-center">
+            <div class="text-2xl font-bold text-text_primary">ManoLab</div>
+            <div class="hidden md:flex ml-8 space-x-8">
+                <a href="#why-manolab" class="text-text_secondary hover:text-primary transition duration-300">소개</a>
+                <!-- Removed "데모 소개" link as per user request -->
+                <a href="#signup" class="text-text_secondary hover:text-primary transition duration-300">사전 신청</a>
+                <a href="#faq" class="text-text_secondary hover:text-primary transition duration-300">문의</a>
+            </div>
+            <!-- Mobile Menu Button (Hamburger) -->
+            <button id="mobile-menu-button" class="md:hidden ml-auto p-2 rounded-md text-text_secondary hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </nav>
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="hidden md:hidden fixed inset-0 bg-white bg-opacity-95 z-40 flex flex-col items-center justify-center space-y-6 text-xl">
+            <button id="close-mobile-menu" class="absolute top-4 right-4 p-2 rounded-md text-text_secondary hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <a href="#why-manolab" class="text-text_primary hover:text-primary" onclick="closeMobileMenu()">소개</a>
+            <!-- Removed "데모 소개" link as per user request -->
+            <a href="#signup" class="text-text_primary hover:text-primary" onclick="closeMobileMenu()">사전 신청</a>
+            <a href="#faq" class="text-text_primary hover:text-primary" onclick="closeMobileMenu()">문의</a>
+        </div>
+    </header>
+
+    <main class="pt-20"> <!-- Padding top to clear fixed header -->
+
+        <!-- Hero Section -->
+        <section id="intro" class="bg-white py-16 md:py-24 px-4 sm:px-6 lg:px-8 text-center md:text-left relative overflow-hidden">
+            <!-- Video background placeholder - remove comments and add video tag when ready -->
+            <!--
+            <video autoplay muted loop class="hero-background-video">
+                <source src="your-video-source.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            -->
+            <div class="container mx-auto flex flex-col md:flex-row items-center justify-between gap-12 relative z-10">
+                <div class="md:w-full">
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-none mb-4">
+                        <span class="text-primary block">AI가 당신을 대신합니다.</span>
+                        <span class="text-text_primary block">당신의 시간은 소중하니까.</span>
+                    </h1>
+                    <p class="text-sm md:text-base text-text_secondary font-bold leading-tight mt-6">
+                        앱 전환과 반복적인 입력에 지치셨나요?<br>
+                        AI가 모든 앱 활동을 처리해 드립니다.<br>
+                        휴대폰이 아닌 당신의 삶에 집중하세요.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Demo Preview Section - "ManoLab의 작동 방식 미리보기" (Moved directly below Hero) -->
+        <section id="demo-preview" class="bg-white py-16 md:py-24 px-4 sm:px-6 lg:px-8">
+            <div class="container mx-auto text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-text_primary mb-8">ManoLab의 작동 방식 미리보기</h2>
+                <div class="bg-card p-6 md:p-8 rounded-2xl shadow-lg max-w-2xl mx-auto">
+                    <div class="flex items-center bg-gray-100 rounded-xl px-4 py-3 mb-4 shadow-inner">
+                        <input type="text" id="command-input" placeholder="예: '스타벅스에서 아이스 아메리카노 주문해 줘'"
+                               class="flex-grow bg-transparent outline-none text-text_primary text-lg placeholder-text_secondary" />
+                        <button id="mic-button" class="ml-3 p-2 rounded-full bg-primary text-white hover:bg-secondary transition duration-300">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-14 0v-1a7 7 0 0114 0v1z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20v-4m0 0H9m3 0h3"></path></svg>
+                        </button>
+                    </div>
+                    <div id="simulation-output" class="simulation-box">
+                        명령어를 입력하여 AI의 동작을 시뮬레이션해보세요!
+                    </div>
+                    <div class="flex items-center justify-center mt-8 space-x-4">
+                        <button id="like-button" class="flex items-center px-6 py-3 bg-red-500 text-white font-semibold rounded-full shadow-md hover:bg-red-600 transition duration-300 transform hover:scale-105">
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>
+                            만족해요!
+                        </button>
+                        <span id="like-count" class="text-2xl font-bold text-text_primary">0</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why ManoLab Section -->
+        <section id="why-manolab" class="bg-background py-16 md:py-24 px-4 sm:px-6 lg:px-8">
+            <div class="container mx-auto text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">왜 ManoLab을 선택해야 할까요?</h2>
+                <p class="text-lg md:text-xl text-text_secondary mb-12 max-w-3xl mx-auto">
+                    당신의 필요를 이해하고 당신을 대신하여 행동하는 지능형 AI 에이전트와 함께<br class="hidden md:block">
+                    모바일 자동화의 미래를 경험하세요.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Feature Card 1: 스마트 자동화 -->
+                    <div class="bg-card p-8 rounded-2xl shadow-lg flex flex-col items-center text-center">
+                        <div class="p-4 rounded-full mb-6 bg-primary text-white">
+                            <!-- Checkmark SVG Icon -->
+                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-text_primary mb-3">스마트 자동화</h3>
+                        <p class="text-text_secondary leading-relaxed">
+                            AI가 당신의 선호도를 학습하고<br>즐겨 사용하는 모든 앱에서 반복적인<br>작업을 원활하게 자동화합니다.
+                        </p>
+                    </div>
+
+                    <!-- Feature Card 2: 범용 호환성 -->
+                    <div class="bg-card p-8 rounded-2xl shadow-lg flex flex-col items-center text-center">
+                        <div class="p-4 rounded-full mb-6 bg-primary text-white">
+                            <!-- Users/Groups SVG Icon -->
+                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M17 19.25H7A2 2 0 015 17.25V7A2 2 0 017 5h10a2 2 0 012 2v10.25a2 2 0 01-2 2zM12 9a3 3 0 100 6 3 3 0 000-6zM15.75 16.75a4 4 0 00-7.5 0h7.5z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-text_primary mb-3">범용 호환성</h3>
+                        <p class="text-text_secondary leading-relaxed">
+                            음식 배달, 쇼핑, 소셜 미디어,<br>생산성 도구를 포함한 수백 개의<br>인기 앱과 연동됩니다.
+                        </p>
+                    </div>
+
+                    <!-- Feature Card 3: 프라이버시 우선 -->
+                    <div class="bg-card p-8 rounded-2xl shadow-lg flex flex-col items-center text-center">
+                        <div class="p-4 rounded-full mb-6 bg-primary text-white">
+                            <!-- Padlock SVG Icon -->
+                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M18 10V7a6 6 0 10-12 0v3H4a2 2 0 00-2 2v8a2 2 0 002 2h16a2 2 0 002-2v-8a2 2 0 00-2-2h-2zm-6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-text_primary mb-3">프라이버시 우선</h3>
+                        <p class="text-text_secondary leading-relaxed">
+                            종단 간 암호화 및 로컬 처리로<br>데이터가 안전하게 유지됩니다.<br>개인 정보는 기기를 벗어나지 않습니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How it Works Section - "ManoLab의 놀라운 경험" -->
+        <section id="how-it-works" class="bg-background py-16 md:py-24 px-4 sm:px-6 lg:px-8">
+            <div class="container mx-auto text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-primary mb-12">ManoLab의 놀라운 경험</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                    <!-- Step 1 -->
+                    <div class="flex flex-col items-center text-center bg-card p-6 rounded-2xl shadow-lg">
+                        <div class="step-indicator mb-6">STEP 1</div>
+                        <h3 class="text-xl font-semibold text-text_primary mb-2">음성 명령</h3>
+                        <p class="text-text_secondary leading-relaxed">
+                            간단하게 요청하세요 -<br>"스타벅스에서 늘 마시던 커피 주문해줘"<br>또는 "어제 쿠팡에서 시킨 옷 언제 온대?"
+                        </p>
+                    </div>
+                    <!-- Step 2 -->
+                    <div class="flex flex-col items-center text-center bg-card p-6 rounded-2xl shadow-lg">
+                        <div class="step-indicator mb-6">STEP 2</div>
+                        <h3 class="text-xl font-semibold text-text_primary mb-2">AI 처리</h3>
+                        <p class="text-text_secondary leading-relaxed">
+                            ManoLab이 맥락을 이해하고,<br>올바른 앱을 찾아 처리합니다.
+                        </p>
+                    </div>
+                    <!-- Step 3 -->
+                    <div class="flex flex-col items-center text-center bg-card p-6 rounded-2xl shadow-lg">
+                        <div class="step-indicator mb-6">STEP 3</div>
+                        <h3 class="text-xl font-semibold text-text_primary mb-2">작업 완료</h3>
+                        <p class="text-text_secondary leading-relaxed">
+                            작업을 완료하면 확인 알림을 받습니다.<br>휴대폰을 만질 필요 없이<br>모든 것이 완료됩니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sign-up Section (Moved to be the last section before FAQ) -->
+        <section id="signup" class="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-signup_bg_light_blue">
+            <div class="container mx-auto text-center max-w-3xl">
+                <h2 class="text-3xl md:text-4xl font-bold text-text_primary mb-4">시간을 되찾을 준비가 되셨나요?</h2>
+                <p class="text-lg md:text-xl text-text_secondary mb-12">
+                    모바일 자동화의 미래를 이미 경험하고 있는 수천 명의 얼리어답터들과 함께하세요.
+                </p>
+
+                <div class="bg-card p-6 md:p-10 rounded-2xl shadow-lg">
+                    <form id="signup-form" class="space-y-6">
+                        <div>
+                            <input type="email" id="email-input" placeholder="이메일 주소를 입력해 주세요" required
+                                   class="w-full px-5 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-lg">
+                        </div>
+                        <div>
+                            <input type="tel" id="phone-input" placeholder="휴대폰 번호 (선택 사항)"
+                                   class="w-full px-5 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-lg">
+                        </div>
+                        <div>
+                            <label for="referral-select" class="sr-only">어떻게 알게 되셨나요?</label>
+                            <select id="referral-select"
+                                    class="w-full px-5 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-lg text-text_primary">
+                                <option value="">어떻게 알게 되셨나요? (선택)</option>
+                                <option value="social_media">소셜 미디어</option>
+                                <option value="friend">지인 추천</option>
+                                <option value="blog">블로그/기사</option>
+                                <option value="advertisement">온라인 광고</option>
+                                <option value="other">기타</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="w-full bg-signup_button_blue text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:opacity-90 transition duration-300 transform hover:scale-105 text-xl">
+                            사전 등록하기
+                        </button>
+                    </form>
+
+                    <div class="flex justify-center items-center mt-6 space-x-6 text-text_secondary text-sm">
+                        <div class="flex items-center">
+                            <!-- Checkmark SVG -->
+                            <svg class="w-4 h-4 mr-1 text-green-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4a1 1 0 000-1.414z" clip-rule="evenodd"></path></svg>
+                            스팸 없음
+                        </div>
+                        <div class="flex items-center">
+                            <!-- Plus/Circle SVG -->
+                            <svg class="w-4 h-4 mr-1 text-green-500" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm-1 14a1 1 0 102 0v-3h3a1 1 0 100-2h-3V8a1 1 0 10-2 0v3H8a1 1 0 100 2h3v3z" clip-rule="evenodd"></path>
+                            </svg>
+                            무료 가입
+                        </div>
+                        <div class="flex items-center">
+                            <!-- Star SVG -->
+                            <svg class="w-4 h-4 mr-1 text-yellow-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.92 8.709c-.783-.57-.381-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                            얼리 액세스
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 text-center">
+                        <div class="p-4 rounded-xl bg-card">
+                            <div class="text-3xl md:text-4xl font-bold text-primary">0</div>
+                            <div class="text-sm text-text_secondary mt-1">얼리 사용자</div>
+                        </div>
+                        <div class="p-4 rounded-xl bg-card">
+                            <div class="text-3xl md:text-4xl font-bold text-primary">94%</div>
+                            <div class="text-sm text-text_secondary mt-1">만족도</div>
+                        </div>
+                        <div class="p-4 rounded-xl bg-card">
+                            <div class="text-3xl md:text-4xl font-bold text-primary">15분</div>
+                            <div class="text-sm text-text_secondary mt-1">일일 절약 시간</div>
+                        </div>
+                    </div>
+
+                    <div class="mt-12 p-6 rounded-xl text-center bg-signup_bonus_yellow text-signup_bonus_text">
+                        <h3 class="text-xl font-semibold mb-2">얼리 액세스 보너스</h3>
+                        <p class="text-base">사전 등록 시, 첫 1,000명 사용자에게 평생 프리미엄 기능과 우선 지원 혜택이 제공됩니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq" class="bg-white py-16 md:py-24 px-4 sm:px-6 lg:px-8">
+            <div class="container mx-auto text-center max-w-3xl">
+                <h2 class="text-3xl md:text-4xl font-bold text-text_primary mb-12">궁금한 점이 있으신가요?</h2>
+                <div class="space-y-4 text-left">
+                    <!-- FAQ Item 1 -->
+                    <div class="faq-item bg-card rounded-xl shadow-md overflow-hidden">
+                        <button class="faq-question w-full p-6 flex justify-between items-center text-lg font-semibold text-text_primary hover:bg-gray-50 transition duration-300 focus:outline-none">
+                            ManoLab AI Agent는 어떤 앱들을 지원하나요?
+                            <svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="faq-answer px-6 pb-6 text-text_secondary hidden">
+                            <p>초기 MVP 버전에서는 카카오톡, 네이버 지도, 스타벅스 앱과 같은 주요 앱 카테고리 또는 앱들을 지원합니다. 점차 지원 앱을 확장해 나갈 예정입니다.</p>
+                        </div>
+                    </div>
+                    <!-- FAQ Item 2 -->
+                    <div class="faq-item bg-card rounded-xl shadow-md overflow-hidden">
+                        <button class="faq-question w-full p-6 flex justify-between items-center text-lg font-semibold text-text_primary hover:bg-gray-50 transition duration-300 focus:outline-none">
+                            개인 정보와 보안은 어떻게 관리되나요?
+                            <svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="faq-answer px-6 pb-6 text-text_secondary hidden">
+                            <p>ManoLab은 사용자 정보 보호와 보안을 최우선으로 합니다. 모든 데이터는 최신 암호화 기술을 사용하여 안전하게 처리되며, 사용자의 명시적인 동의 없이 개인 정보가 외부로 유출되지 않습니다.</p>
+                        </div>
+                    </div>
+                    <!-- FAQ Item 3 -->
+                    <div class="faq-item bg-card rounded-xl shadow-md overflow-hidden">
+                        <button class="faq-question w-full p-6 flex justify-between items-center text-lg font-semibold text-text_primary hover:bg-gray-50 transition duration-300 focus:outline-none">
+                            ManoLab은 언제 정식 출시되나요?
+                            <svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="faq-answer px-6 pb-6 text-text_secondary hidden">
+                            <p>MVP 테스트를 통해 사용자 피드백을 적극 반영하여 2026년 상반기 정식 출시를 목표하고 있습니다. 테스트 참여자분들께는 가장 먼저 소식을 전해드립니다.</p>
+                        </div>
+                    </div>
+                    <!-- FAQ Item 4 -->
+                    <div class="faq-item bg-card rounded-xl shadow-md overflow-hidden">
+                        <button class="faq-question w-full p-6 flex justify-between items-center text-lg font-semibold text-text_primary hover:bg-gray-50 transition duration-300 focus:outline-none">
+                            기존 AI 비서(Siri, Google Assistant 등)와 무엇이 다른가요?
+                            <svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="faq-answer px-6 pb-6 text-text_secondary hidden">
+                            <p>기존 비서가 단일 앱 내 정보 검색이나 제한된 명령 수행에 초점을 맞춘다면, ManoLab은 여러 앱을 넘나들며 복잡하고 다단계적인 작업을 자율적으로 완료하는 데 특화되어 있습니다. 마치 실제 사람이 스마트폰을 조작하듯이 AI가 앱을 제어합니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-300 py-12 px-4 sm:px-6 lg:px-8">
+        <div class="container mx-auto text-center md:flex md:justify-between md:items-center">
+            <div class="mb-6 md:mb-0">
+                <p>&copy; 2025 ManoLab. All rights reserved.</p>
+            </div>
+            <div class="flex flex-col md:flex-row md:space-x-8 space-y-4 md:space-y-0">
+                <a href="#" class="hover:text-white transition duration-300">개인정보처리방침</a>
+                <a href="#" class="hover:text-white transition duration-300">이용약관</a>
+                <a href="mailto:contact@manolab.com" class="hover:text-white transition duration-300">contact@manolab.com</a>
+                <div class="flex justify-center md:justify-start space-x-4 mt-4 md:mt-0">
+                    <!-- Social Media Icons (placeholders) -->
+                    <a href="#" class="hover:text-white transition duration-300">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.356-.012-.534A8.347 8.347 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.322 8.322 0 01-2.675 1.018 4.136 4.136 0 00-7.033 3.763 11.66 11.66 0 01-8.4-4.269 4.116 4.116 0 001.27 5.477A4.072 4.072 0 012 10.425v.053a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.12 4.12 0 003.834 2.85A8.233 8.233 0 012 18.188a11.644 11.644 0 006.29 1.84z"></path>
+                        </svg>
+                    </a>
+                    <a href="#" class="hover:text-white transition duration-300">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M12.984 0H11.016A11.016 11.016 0 000 11.016v1.968A11.016 11.016 0 0011.016 24h1.968A11.016 11.016 0 0024 12.984V11.016A11.016 11.016 0 0012.984 0zM7.5 17.25h-2.5V9.75h2.5V17.25zM6.25 8.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM18.5 17.25h-2.5v-3.5c0-.85-.15-1.7-1.15-1.7s-1.05.85-1.05 1.7v3.5h-2.5V9.75h2.5v1.25a2.5 2.5 0 012.2-1.25c2.4 0 2.8 2.3 2.8 5.75v1.75z" clip-rule="evenodd"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const closeMobileMenuButton = document.getElementById('close-mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
+        });
+
+        closeMobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+            document.body.style.overflow = ''; // Restore scrolling
+        });
+
+        function closeMobileMenu() {
+            mobileMenu.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        // Like Button functionality
+        const likeButton = document.getElementById('like-button');
+        const likeCount = document.getElementById('like-count');
+        let currentLikes = 0; // Initialize with 0, or load from localStorage if persistence is desired
+
+        // Try to load like count from local storage
+        if (localStorage.getItem('manolab_likes')) {
+            currentLikes = parseInt(localStorage.getItem('manolab_likes'));
+        } else {
+            // Set initial random likes for demonstration purposes, as per image (e.g., 1234)
+            currentLikes = 1234;
+            localStorage.setItem('manolab_likes', currentLikes);
+        }
+        likeCount.textContent = currentLikes.toLocaleString();
+
+        likeButton.addEventListener('click', () => {
+            currentLikes++;
+            likeCount.textContent = currentLikes.toLocaleString();
+            localStorage.setItem('manolab_likes', currentLikes); // Save to local storage
+            // In a real app, this would send data to a backend
+        });
+
+        // Demo Simulation functionality
+        const commandInput = document.getElementById('command-input');
+        const micButton = document.getElementById('mic-button');
+        const simulationOutput = document.getElementById('simulation-output');
+
+        const simulateCommand = () => {
+            const command = commandInput.value.trim();
+            if (command === '') {
+                simulationOutput.textContent = '명령어를 입력하여 AI의 동작을 시뮬레이션해보세요!';
+                simulationOutput.classList.remove('active');
+                return;
+            }
+
+            simulationOutput.classList.add('active');
+            simulationOutput.innerHTML = `AI가 "${command}" 명령을 이해하고 있습니다. <br><span class="inline-block animate-bounce-custom">.</span><span class="inline-block animate-bounce-custom delay-100">.</span><span class="inline-block animate-bounce-custom delay-200">.</span>`;
+
+            setTimeout(() => {
+                simulationOutput.innerHTML = `AI가 "${command}" 명령을 성공적으로 수행했습니다! 🎉<br>잠시 후 결과를 확인해 주세요.`;
+            }, 2000); // Simulate processing time
+
+            setTimeout(() => {
+                simulationOutput.innerHTML = '데모 완료! 실제 앱에서 ManoLab이 어떻게 작동할지 상상해 보세요.';
+                simulationOutput.classList.remove('active');
+            }, 5000);
+        };
+
+        commandInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                simulateCommand();
+            }
+        });
+        micButton.addEventListener('click', simulateCommand);
+
+
+        // FAQ Accordion functionality
+        const faqQuestions = document.querySelectorAll('.faq-question');
+
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                const icon = question.querySelector('svg');
+
+                // Close other open answers
+                faqQuestions.forEach(otherQuestion => {
+                    if (otherQuestion !== question) {
+                        const otherAnswer = otherQuestion.nextElementSibling;
+                        const otherIcon = otherQuestion.querySelector('svg');
+                        if (!otherAnswer.classList.contains('hidden')) {
+                            otherAnswer.classList.add('hidden');
+                            otherQuestion.setAttribute('aria-expanded', 'false');
+                            otherIcon.classList.remove('rotate-180');
+                        }
+                    }
+                });
+
+                // Toggle current answer
+                answer.classList.toggle('hidden');
+                const isExpanded = !answer.classList.contains('hidden');
+                question.setAttribute('aria-expanded', isExpanded);
+                icon.classList.toggle('rotate-180', isExpanded);
+            });
+        });
+
+        // Form Submission (client-side only for this demo)
+        const signupForm = document.getElementById('signup-form');
+        signupForm.addEventListener('submit', (event) => {
+            event.preventDefault(); // Prevent actual form submission
+            const email = document.getElementById('email-input').value;
+            const phone = document.getElementById('phone-input').value;
+            const referral = document.getElementById('referral-select').value;
+
+            // In a real application, this data would be sent to a backend server.
+            console.log('--- 사전 등록 정보 ---');
+            console.log('이메일:', email);
+            console.log('휴대폰 번호:', phone || '미입력');
+            console.log('알게 된 경로:', referral || '미입력');
+            console.log('--------------------');
+
+            // Show a simple confirmation message instead of alert()
+            const confirmationMessage = document.createElement('div');
+            confirmationMessage.className = 'fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50';
+            confirmationMessage.innerHTML = `
+                <div class="bg-white p-8 rounded-lg shadow-xl text-center max-w-sm mx-auto">
+                    <h3 class="text-2xl font-bold text-primary mb-4">사전 등록 완료! 🎉</h3>
+                    <p class="text-text_secondary mb-6">ManoLab MVP 테스트에 성공적으로 등록되었습니다.<br>최신 소식을 가장 먼저 받아보세요!</p>
+                    <button id="close-confirmation" class="bg-primary text-white font-bold py-3 px-6 rounded-lg hover:bg-secondary transition duration-300">확인</button>
+                </div>
+            `;
+            document.body.appendChild(confirmationMessage);
+
+            document.getElementById('close-confirmation').addEventListener('click', () => {
+                document.body.removeChild(confirmationMessage);
+                signupForm.reset(); // Clear the form
+            });
+        });
+    </script>
+</body>
+</html>
