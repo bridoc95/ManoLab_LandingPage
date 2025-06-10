@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ManoLab - AI가 당신을 대신합니다.</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -12,21 +11,55 @@
                 extend: {
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
-                    },
+                    }, 
                     colors: {
-                        // Updated color palette to match the provided image
-                        primary: '#4F46E5', // Darker, more vibrant blue for main accents
-                        secondary: '#3730A3', // A slightly darker shade of primary for hover/active states
-                        accent: '#818CF8',   // Lighter shade of primary
-                        background: '#F9FAFB', // Light gray background
-                        card: '#FFFFFF',     // White for cards and header background
-                        text_primary: '#1A202C', // Very dark gray, almost black for main text and logo
-                        text_secondary: '#6B7280', // Medium gray for secondary text like nav links
-                        // Custom colors derived from image_063d1f.png and image_0639f5.png
-                        signup_bg_light_blue: '#E0E8F8', // Background for "Ready to reclaim your time?" section
-                        signup_button_blue: '#5B75E5', // For the sign-up button
-                        signup_bonus_yellow: '#FFFBE6', // For the early access bonus box
-                        signup_bonus_text: '#9C6F00', // For text in the early access bonus box
+                        primary: '#4F46E5',
+                        secondary: '#3730A3',
+                        accent: '#818CF8',
+                        background: '#F9FAFB',
+                        card: '#FFFFFF',
+                        text_primary: '#1A202C',
+                        text_secondary: '#6B7280',
+                        signup_bg_light_blue: '#E0E8F8',
+                        signup_button_blue: '#5B75E5',
+                        signup_bonus_yellow: '#FFFBE6',
+                        signup_bonus_text: '#9C6F00',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-delayed': 'float 6s ease-in-out infinite 2s',
+                        'fade-in-up': 'fadeInUp 0.8s ease-out',
+                        'typing': 'typing 3.5s steps(40, end), blink-caret .75s step-end infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'bounce-gentle': 'bounce-gentle 2s infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        typing: {
+                            '0%': { width: '0' },
+                            '100%': { width: '100%' },
+                        },
+                        'blink-caret': {
+                            '0%, 50%': { borderColor: 'transparent' },
+                            '51%, 100%': { borderColor: '#4F46E5' },
+                        },
+                        'bounce-gentle': {
+                            '0%, 100%': { 
+                                transform: 'translateY(-25%)',
+                                animationTimingFunction: 'cubic-bezier(0.8, 0, 1, 1)'
+                            },
+                            '50%': { 
+                                transform: 'translateY(0)',
+                                animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)'
+                            },
+                        }
                     }
                 }
             }
@@ -34,253 +67,478 @@
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #F9FAFB; /* Light gray background */
+            background: #ffffff;
+            min-height: 100vh;
         }
-        /* Custom styles for the demo simulation area */
-        .simulation-box {
-            min-height: 120px;
-            background-color: #F3F4F6;
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: #6B7280;
-            font-size: 0.95rem;
-            transition: background-color 0.3s ease;
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
         }
-        .simulation-box.active {
-            background-color: #E5E7EB;
+
+        .hero-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
         }
-        .animate-bounce-custom {
-            animation: bounce-custom 1s infinite;
-        }
-        @keyframes bounce-custom {
-            0%, 100% {
-                transform: translateY(-25%);
-                animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
-            }
-            50% {
-                transform: translateY(0);
-                animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-            }
-        }
-        /* Custom style for video background (if added later) */
-        .hero-background-video {
+
+        .hero-gradient::before {
+            content: '';
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -1;
-            opacity: 0.2; /* Lighter opacity as requested */
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
         }
-        /* Style for step indicators - updated to match image_062691.png */
-        .step-indicator {
-            background-color: #E5E7EB; /* Gray-200 equivalent */
-            color: #1F2937; /* Darker text for contrast */
-            font-weight: 600; /* semibold */
-            padding: 0.5rem 1.25rem;
-            border-radius: 0.5rem; /* rounded-lg */
-            display: inline-block;
+
+        .floating-element {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            backdrop-filter: blur(10px);
+        }
+
+        .floating-1 { width: 80px; height: 80px; top: 10%; left: 10%; animation: float 6s ease-in-out infinite; }
+        .floating-2 { width: 60px; height: 60px; top: 20%; right: 15%; animation: float 8s ease-in-out infinite 1s; }
+        .floating-3 { width: 100px; height: 100px; bottom: 20%; left: 20%; animation: float 7s ease-in-out infinite 2s; }
+        .floating-4 { width: 40px; height: 40px; top: 60%; right: 25%; animation: float 5s ease-in-out infinite 3s; }
+
+        .phone-mockup {
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            border-radius: 25px;
+            padding: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+            margin: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .app-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .app-icon.small {
+            width: 48px;
+            height: 48px;
+            font-size: 20px;
+            margin: 5px;
+        }
+
+        .typing-text {
+            border-right: 2px solid #4F46E5;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .section-fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .ai-response {
+            background: linear-gradient(135deg, #4F46E5, #818CF8);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 20px;
+            margin: 10px 0;
+            animation: fadeInUp 0.5s ease;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+        }
+
+        .user-message {
+            background: #f3f4f6;
+            color: #1f2937;
+            padding: 15px 20px;
+            border-radius: 20px;
+            margin: 10px 0;
+            text-align: right;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .demo-screen {
+            background: #000;
+            border-radius: 25px;
+            padding: 20px;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            min-height: 300px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .demo-screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 49%, rgba(0, 255, 0, 0.03) 50%, transparent 51%);
+            animation: scan 2s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
     </style>
 </head>
 <body class="text-text_primary">
 
-    <!-- Navigation Bar -->
-    <header class="bg-card shadow-sm fixed top-0 left-0 right-0 z-50">
-        <nav class="container mx-auto px-4 py-4 flex items-center">
-            <div class="text-2xl font-bold text-text_primary">ManoLab</div>
-            <div class="hidden md:flex ml-8 space-x-8">
-                <a href="#why-manolab" class="text-text_secondary hover:text-primary transition duration-300">소개</a>
-                <!-- Removed "데모 소개" link as per user request -->
-                <a href="#signup" class="text-text_secondary hover:text-primary transition duration-300">사전 신청</a>
-                <a href="#faq" class="text-text_secondary hover:text-primary transition duration-300">문의</a>
+    <!-- Enhanced Navigation Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-200 shadow-sm">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="text-2xl font-bold text-primary/95">ManoLab</div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-button" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition duration-300 hidden">
+                    <svg class="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
             </div>
-            <!-- Mobile Menu Button (Hamburger) -->
-            <button id="mobile-menu-button" class="md:hidden ml-auto p-2 rounded-md text-text_secondary hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-            </button>
-        </nav>
-        <!-- Mobile Menu Overlay -->
-        <div id="mobile-menu" class="hidden md:hidden fixed inset-0 bg-white bg-opacity-95 z-40 flex flex-col items-center justify-center space-y-6 text-xl">
-            <button id="close-mobile-menu" class="absolute top-4 right-4 p-2 rounded-md text-text_secondary hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-            <a href="#why-manolab" class="text-text_primary hover:text-primary" onclick="closeMobileMenu()">소개</a>
-            <!-- Removed "데모 소개" link as per user request -->
-            <a href="#signup" class="text-text_primary hover:text-primary" onclick="closeMobileMenu()">사전 신청</a>
-            <a href="#faq" class="text-text_primary hover:text-primary" onclick="closeMobileMenu()">문의</a>
         </div>
     </header>
 
-    <main class="pt-20"> <!-- Padding top to clear fixed header -->
+    <main class="pt-16">
+        <!-- Enhanced Hero Section with Live Demo -->
+        <section id="intro" class="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-20 md:py-32 px-4 sm:px-6 lg:px-8">
+            <div class="container mx-auto max-w-7xl">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    
+                    <!-- Left Side - Main Message -->
+                    <div class="text-center lg:text-left">
+                        <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-16">
+                            <span class="bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">AI가 당신을 대신합니다.</span>
+                            <span class="block text-text_primary animate-fade-in-up text-3xl md:text-4xl lg:text-5xl mt-2">당신의 시간은 소중하니까.</span>
+                        </h1>
+                        
+                        <div class="text-center lg:text-left">
+                            <p class="text-lg text-gray-700 font-semibold">
+                                <span class="text-gray-800">이제 앱 조작은 </span>
+                                <span class="bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+                                    AI에게
+                                </span>
+                                <span class="text-gray-800"> 맡기세요.</span>
+                            </h1>
+                            
+                            <p class="text-lg text-gray-700 font-semibold">
+                                스타벅스 주문, 배달 음식, 병원 예약까지 자동으로.
+                            </p>
+                            
+                            <p class="text-lg text-gray-700 font-semibold mb-8">
+                                당신은 정말 중요한 일에만 집중하세요.
+                            </p>
+                        </div>
+                        
+                        
+                        <!-- Enhanced Trust Indicators with Impact Design -->
+                        <div class="mt-12">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center lg:text-left">
+                                <!-- Money Savings -->
+                                <div class="group hover:scale-105 transition duration-300">
+                                    <div class="flex items-center justify-center lg:justify-start mb-3">
+                                        <div class="w-12 h-12 bg-gradient-to-br from-primary/20 to-primary/30 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition duration-300 mr-4 flex-shrink-0">
+                                            <span class="text-xl">💰</span>
+                                        </div>
+                                        <div>
+                                            <div class="text-3xl font-bold text-primary" id="hero-money-counter">₩42,000</div>
+                                            <div class="text-sm font-medium text-gray-600">월 평균 절약</div>
+                                        </div>
+                                    </div>
+                                </div>
 
-        <!-- Hero Section -->
-        <section id="intro" class="bg-white py-16 md:py-24 px-4 sm:px-6 lg:px-8 text-center md:text-left relative overflow-hidden">
-            <!-- Video background placeholder - remove comments and add video tag when ready -->
-            <!--
-            <video autoplay muted loop class="hero-background-video">
-                <source src="your-video-source.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-            -->
-            <div class="container mx-auto flex flex-col md:flex-row items-center justify-between gap-12 relative z-10">
-                <div class="md:w-full">
-                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-none mb-4">
-                        <span class="text-primary block">AI가 당신을 대신합니다.</span>
-                        <span class="text-text_primary block">당신의 시간은 소중하니까.</span>
-                    </h1>
-                    <p class="text-sm md:text-base text-text_secondary font-bold leading-tight mt-6">
-                        앱 전환과 반복적인 입력에 지치셨나요?<br>
-                        AI가 모든 앱 활동을 처리해 드립니다.<br>
-                        휴대폰이 아닌 당신의 삶에 집중하세요.
-                    </p>
+                                <!-- Time Savings -->
+                                <div class="group hover:scale-105 transition duration-300">
+                                    <div class="flex items-center justify-center lg:justify-start mb-3">
+                                        <div class="w-12 h-12 bg-gradient-to-br from-primary/20 to-primary/30 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition duration-300 mr-4 flex-shrink-0">
+                                            <span class="text-xl">⏱️</span>
+                                        </div>
+                                        <div>
+                                            <div class="text-3xl font-bold text-primary" id="hero-time-counter">34분</div>
+                                            <div class="text-sm font-medium text-gray-600">하루 절약 시간</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tasks Completed -->
+                                <div class="group hover:scale-105 transition duration-300">
+                                    <div class="flex items-center justify-center lg:justify-start mb-3">
+                                        <div class="w-12 h-12 bg-gradient-to-br from-primary/20 to-primary/30 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition duration-300 mr-4 flex-shrink-0">
+                                            <span class="text-xl">🎯</span>
+                                        </div>
+                                        <div>
+                                            <div class="text-3xl font-bold text-primary" id="hero-task-counter">1,247</div>
+                                            <div class="text-sm font-medium text-gray-600">완료된 작업</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- CTA Buttons -->
+                        <div class="mt-8 animate-fade-in-up space-y-4 sm:space-y-0 sm:space-x-4 sm:flex sm:justify-center lg:justify-start">
+                            <a href="#signup" class="inline-flex items-center px-8 py-4 bg-primary text-white font-semibold rounded-full shadow-lg hover:bg-secondary transition duration-300 transform hover:scale-105">
+                                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                                사전 신청하기
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Right Side - Live Demo -->
+                    <div class="relative">
+                        <div class="glass-effect p-8 rounded-3xl shadow-2xl">
+                            <div class="text-center mb-6">
+                                <h3 class="text-2xl font-bold text-text_primary mb-2">ManoLab AI 실시간 데모</h3>
+                                <p class="text-text_secondary">실제 AI가 어떻게 작동하는지 직접 체험해보세요!</p>
+                            </div>
+
+                            <!-- Chat Interface -->
+                            <div class="bg-gray-50 rounded-2xl p-6 mb-4 h-80 overflow-y-auto" id="hero-chat-container">
+                                <div class="text-center text-gray-500 py-8">
+                                    <div class="text-4xl mb-4">🤖</div>
+                                    <p class="text-lg font-medium">명령어를 입력하여 AI의 동작을 시뮬레이션해보세요!</p>
+                                    <div class="mt-4 text-sm text-gray-400 space-y-1">
+                                        <p>💡 <strong>추천 명령어:</strong></p>
+                                        <p class="cursor-pointer hover:text-blue-500 transition duration-200">"스타벅스에서 늘 마시던 아이스 아메리카노 주문해 줘"</p>
+                                        <p class="cursor-pointer hover:text-blue-500 transition duration-200">"방금 주문한 옷, 배송지를 회사로 바꾸고 어디쯤 오는지 알려줘"</p>
+                                        <p class="cursor-pointer hover:text-blue-500 transition duration-200">"오늘 저녁에 비대면 진료로 피부과 의사 예약해 줘"</p>
+                                        <p class="cursor-pointer hover:text-blue-500 transition duration-200">"교촌치킨 허니콤보 배달 주문해 줘"</p>
+                                        <p class="cursor-pointer hover:text-blue-500 transition duration-200">"회사까지 택시 호출해 줘"</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center bg-white rounded-xl px-4 py-3 shadow-inner border">
+                                <input type="text" id="hero-chat-input" placeholder="AI에게 명령하세요..."
+                                    class="flex-grow bg-transparent outline-none text-text_primary placeholder-text_secondary" />
+                                <button id="hero-send-button" class="ml-3 p-3 rounded-full bg-primary text-white hover:bg-secondary transition duration-300">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Demo Preview Section - "ManoLab의 작동 방식 미리보기" (Moved directly below Hero) -->
-        <section id="demo-preview" class="bg-white py-16 md:py-24 px-4 sm:px-6 lg:px-8">
+        <!-- Enhanced Why ManoLab Section -->
+        <section id="why-manolab" class="bg-white py-20 md:py-32 px-4 sm:px-6 lg:px-8 section-fade-in">
             <div class="container mx-auto text-center">
-                <h2 class="text-3xl md:text-4xl font-bold text-text_primary mb-8">ManoLab의 작동 방식 미리보기</h2>
-                <div class="bg-card p-6 md:p-8 rounded-2xl shadow-lg max-w-2xl mx-auto">
-                    <div class="flex items-center bg-gray-100 rounded-xl px-4 py-3 mb-4 shadow-inner">
-                        <input type="text" id="command-input" placeholder="예: '스타벅스에서 아이스 아메리카노 주문해 줘'"
-                               class="flex-grow bg-transparent outline-none text-text_primary text-lg placeholder-text_secondary" />
-                        <button id="mic-button" class="ml-3 p-2 rounded-full bg-primary text-white hover:bg-secondary transition duration-300">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-14 0v-1a7 7 0 0114 0v1z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20v-4m0 0H9m3 0h3"></path></svg>
-                        </button>
-                    </div>
-                    <div id="simulation-output" class="simulation-box">
-                        명령어를 입력하여 AI의 동작을 시뮬레이션해보세요!
-                    </div>
-                    <div class="flex items-center justify-center mt-8 space-x-4">
-                        <button id="like-button" class="flex items-center px-6 py-3 bg-red-500 text-white font-semibold rounded-full shadow-md hover:bg-red-600 transition duration-300 transform hover:scale-105">
-                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>
-                            만족해요!
-                        </button>
-                        <span id="like-count" class="text-2xl font-bold text-text_primary">0</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Why ManoLab Section -->
-        <section id="why-manolab" class="bg-background py-16 md:py-24 px-4 sm:px-6 lg:px-8">
-            <div class="container mx-auto text-center">
-                <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">왜 ManoLab을 선택해야 할까요?</h2>
-                <p class="text-lg md:text-xl text-text_secondary mb-12 max-w-3xl mx-auto">
-                    당신의 필요를 이해하고 당신을 대신하여 행동하는 지능형 AI 에이전트와 함께<br class="hidden md:block">
+                <h2 class="text-4xl md:text-5xl font-bold text-primary mb-6">왜 ManoLab을 선택해야 할까요?</h2>
+                <p class="text-xl text-text_secondary mb-16 max-w-3xl mx-auto">
+                    당신의 필요를 이해하고 당신을 대신하여 행동하는 지능형 AI 에이전트와 함께<br>
                     모바일 자동화의 미래를 경험하세요.
                 </p>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <!-- Feature Card 1: 스마트 자동화 -->
-                    <div class="bg-card p-8 rounded-2xl shadow-lg flex flex-col items-center text-center">
-                        <div class="p-4 rounded-full mb-6 bg-primary text-white">
-                            <!-- Checkmark SVG Icon -->
-                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                            </svg>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-6xl mx-auto">
+                    <div class="group">
+                        <div class="bg-gradient-to-br from-blue-50 to-indigo-100 p-8 rounded-3xl shadow-lg transition duration-500 group-hover:shadow-2xl group-hover:scale-105">
+                            <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:rotate-12 transition duration-500">
+                                <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl font-bold text-text_primary mb-4">스마트 자동화</h3>
+                            <p class="text-text_secondary leading-relaxed">
+                                AI가 당신의 선호도를 학습하고 즐겨 사용하는 모든 앱에서 반복적인 작업을 원활하게 자동화합니다.
+                            </p>
                         </div>
-                        <h3 class="text-xl font-bold text-text_primary mb-3">스마트 자동화</h3>
-                        <p class="text-text_secondary leading-relaxed">
-                            AI가 당신의 선호도를 학습하고<br>즐겨 사용하는 모든 앱에서 반복적인<br>작업을 원활하게 자동화합니다.
-                        </p>
                     </div>
 
-                    <!-- Feature Card 2: 범용 호환성 -->
-                    <div class="bg-card p-8 rounded-2xl shadow-lg flex flex-col items-center text-center">
-                        <div class="p-4 rounded-full mb-6 bg-primary text-white">
-                            <!-- Users/Groups SVG Icon -->
-                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" d="M17 19.25H7A2 2 0 015 17.25V7A2 2 0 017 5h10a2 2 0 012 2v10.25a2 2 0 01-2 2zM12 9a3 3 0 100 6 3 3 0 000-6zM15.75 16.75a4 4 0 00-7.5 0h7.5z" clip-rule="evenodd"></path>
-                            </svg>
+                    <div class="group">
+                        <div class="bg-gradient-to-br from-purple-50 to-pink-100 p-8 rounded-3xl shadow-lg transition duration-500 group-hover:shadow-2xl group-hover:scale-105">
+                            <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:rotate-12 transition duration-500">
+                                <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl font-bold text-text_primary mb-4">범용 호환성</h3>
+                            <p class="text-text_secondary leading-relaxed">
+                                음식 배달, 쇼핑, 소셜 미디어, 생산성 도구를 포함한 수백 개의 인기 앱과 연동됩니다.
+                            </p>
                         </div>
-                        <h3 class="text-xl font-bold text-text_primary mb-3">범용 호환성</h3>
-                        <p class="text-text_secondary leading-relaxed">
-                            음식 배달, 쇼핑, 소셜 미디어,<br>생산성 도구를 포함한 수백 개의<br>인기 앱과 연동됩니다.
-                        </p>
                     </div>
 
-                    <!-- Feature Card 3: 프라이버시 우선 -->
-                    <div class="bg-card p-8 rounded-2xl shadow-lg flex flex-col items-center text-center">
-                        <div class="p-4 rounded-full mb-6 bg-primary text-white">
-                            <!-- Padlock SVG Icon -->
-                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" d="M18 10V7a6 6 0 10-12 0v3H4a2 2 0 00-2 2v8a2 2 0 002 2h16a2 2 0 002-2v-8a2 2 0 00-2-2h-2zm-6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
-                            </svg>
+                    <div class="group">
+                        <div class="bg-gradient-to-br from-green-50 to-emerald-100 p-8 rounded-3xl shadow-lg transition duration-500 group-hover:shadow-2xl group-hover:scale-105">
+                            <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:rotate-12 transition duration-500">
+                                <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM12 17c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM15.1 8H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl font-bold text-text_primary mb-4">프라이버시 우선</h3>
+                            <p class="text-text_secondary leading-relaxed">
+                                종단 간 암호화 및 로컬 처리로 데이터가 안전하게 유지됩니다. 개인 정보는 기기를 벗어나지 않습니다.
+                            </p>
                         </div>
-                        <h3 class="text-xl font-bold text-text_primary mb-3">프라이버시 우선</h3>
-                        <p class="text-text_secondary leading-relaxed">
-                            종단 간 암호화 및 로컬 처리로<br>데이터가 안전하게 유지됩니다.<br>개인 정보는 기기를 벗어나지 않습니다.
-                        </p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- How it Works Section - "ManoLab의 놀라운 경험" -->
-        <section id="how-it-works" class="bg-background py-16 md:py-24 px-4 sm:px-6 lg:px-8">
+        <!-- Enhanced How it Works Section -->
+        <section id="how-it-works" class="bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-20 md:py-32 px-4 sm:px-6 lg:px-8 section-fade-in">
             <div class="container mx-auto text-center">
-                <h2 class="text-3xl md:text-4xl font-bold text-primary mb-12">ManoLab의 놀라운 경험</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-                    <!-- Step 1 -->
-                    <div class="flex flex-col items-center text-center bg-card p-6 rounded-2xl shadow-lg">
-                        <div class="step-indicator mb-6">STEP 1</div>
-                        <h3 class="text-xl font-semibold text-text_primary mb-2">음성 명령</h3>
-                        <p class="text-text_secondary leading-relaxed">
-                            간단하게 요청하세요 -<br>"스타벅스에서 늘 마시던 커피 주문해줘"<br>또는 "어제 쿠팡에서 시킨 옷 언제 온대?"
-                        </p>
+                <h2 class="text-4xl md:text-5xl font-bold text-primary mb-16">ManoLab의 놀라운 경험</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16 max-w-5xl mx-auto">
+                    <div class="relative">
+                        <div class="glass-effect p-8 text-center hover:scale-105 transition duration-500">
+                            <div class="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold shadow-lg">1</div>
+                            <h3 class="text-2xl font-semibold text-text_primary mb-4">음성 명령</h3>
+                            <p class="text-text_secondary leading-relaxed">
+                                간단하게 요청하세요 -<br>"스타벅스에서 늘 마시던 커피 주문해줘"<br>또는 "어제 쿠팡에서 시킨 옷 언제 온대?"
+                            </p>
+                        </div>
+                        <div class="hidden md:block absolute top-1/2 right-0 transform translate-x-1/2 -translate-y-1/2">
+                            <div class="w-8 h-0.5 bg-gradient-to-r from-purple-400 to-pink-400"></div>
+                            <div class="w-3 h-3 bg-pink-400 rounded-full absolute -right-1 -top-1"></div>
+                        </div>
                     </div>
-                    <!-- Step 2 -->
-                    <div class="flex flex-col items-center text-center bg-card p-6 rounded-2xl shadow-lg">
-                        <div class="step-indicator mb-6">STEP 2</div>
-                        <h3 class="text-xl font-semibold text-text_primary mb-2">AI 처리</h3>
-                        <p class="text-text_secondary leading-relaxed">
-                            ManoLab이 맥락을 이해하고,<br>올바른 앱을 찾아 처리합니다.
-                        </p>
+
+                    <div class="relative">
+                        <div class="glass-effect p-8 text-center hover:scale-105 transition duration-500">
+                            <div class="w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold shadow-lg">2</div>
+                            <h3 class="text-2xl font-semibold text-text_primary mb-4">AI 처리</h3>
+                            <p class="text-text_secondary leading-relaxed">
+                                ManoLab이 맥락을 이해하고,<br>올바른 앱을 찾아 처리합니다.
+                            </p>
+                        </div>
+                        <div class="hidden md:block absolute top-1/2 right-0 transform translate-x-1/2 -translate-y-1/2">
+                            <div class="w-8 h-0.5 bg-gradient-to-r from-pink-400 to-red-400"></div>
+                            <div class="w-3 h-3 bg-red-400 rounded-full absolute -right-1 -top-1"></div>
+                        </div>
                     </div>
-                    <!-- Step 3 -->
-                    <div class="flex flex-col items-center text-center bg-card p-6 rounded-2xl shadow-lg">
-                        <div class="step-indicator mb-6">STEP 3</div>
-                        <h3 class="text-xl font-semibold text-text_primary mb-2">작업 완료</h3>
-                        <p class="text-text_secondary leading-relaxed">
-                            작업을 완료하면 확인 알림을 받습니다.<br>휴대폰을 만질 필요 없이<br>모든 것이 완료됩니다.
-                        </p>
+
+                    <div class="relative">
+                        <div class="glass-effect p-8 text-center hover:scale-105 transition duration-500">
+                            <div class="w-20 h-20 bg-gradient-to-r from-pink-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold shadow-lg">3</div>
+                            <h3 class="text-2xl font-semibold text-text_primary mb-4">작업 완료</h3>
+                            <p class="text-text_secondary leading-relaxed">
+                                작업을 완료하면 확인 알림을 받습니다.<br>휴대폰을 만질 필요 없이<br>모든 것이 완료됩니다.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Sign-up Section (Moved to be the last section before FAQ) -->
-        <section id="signup" class="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-signup_bg_light_blue">
-            <div class="container mx-auto text-center max-w-3xl">
-                <h2 class="text-3xl md:text-4xl font-bold text-text_primary mb-4">시간을 되찾을 준비가 되셨나요?</h2>
-                <p class="text-lg md:text-xl text-text_secondary mb-12">
+        <!-- Testimonials Section -->
+        <section class="bg-gradient-to-r from-purple-50 to-blue-50 py-20 md:py-32 px-4 sm:px-6 lg:px-8 section-fade-in">
+            <div class="container mx-auto text-center">
+                <h2 class="text-4xl md:text-5xl font-bold text-text_primary mb-16">사용자들의 생생한 후기</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    <div class="testimonial-card p-8 rounded-2xl">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-lg">김</div>
+                            <div class="ml-4">
+                                <div class="font-semibold">김민수</div>
+                                <div class="text-sm text-gray-500">직장인, 29세</div>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 leading-relaxed">"출근길에 커피 주문부터 점심 배달까지 모든 게 자동으로 처리돼요. 정말 마법 같아요!"</p>
+                        <div class="flex text-yellow-400 mt-4">
+                            ⭐⭐⭐⭐⭐
+                        </div>
+                    </div>
+
+                    <div class="testimonial-card p-8 rounded-2xl">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-r from-pink-400 to-red-500 rounded-full flex items-center justify-center text-white font-bold text-lg">이</div>
+                            <div class="ml-4">
+                                <div class="font-semibold">이지영</div>
+                                <div class="text-sm text-gray-500">대학생, 22세</div>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 leading-relaxed">"수업 시간표 관리하고 과제 알림까지 받아서 생활이 정말 편해졌어요. 친구들도 다 부러워해요."</p>
+                        <div class="flex text-yellow-400 mt-4">
+                            ⭐⭐⭐⭐⭐
+                        </div>
+                    </div>
+
+                    <div class="testimonial-card p-8 rounded-2xl">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-r from-green-400 to-teal-500 rounded-full flex items-center justify-center text-white font-bold text-lg">박</div>
+                            <div class="ml-4">
+                                <div class="font-semibold">박준호</div>
+                                <div class="text-sm text-gray-500">사업가, 35세</div>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 leading-relaxed">"회의 일정 조율이나 출장 예약 등 번거로운 업무들이 자동화되니 비즈니스에만 집중할 수 있어요."</p>
+                        <div class="flex text-yellow-400 mt-4">
+                            ⭐⭐⭐⭐⭐
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Enhanced Sign-up Section -->
+        <section id="signup" class="py-20 md:py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 relative overflow-hidden section-fade-in">
+            <div class="floating-element floating-1"></div>
+            <div class="floating-element floating-2"></div>
+            <div class="floating-element floating-3"></div>
+            
+            <div class="container mx-auto text-center max-w-4xl relative z-10">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">시간을 되찾을 준비가 되셨나요?</h2>
+                <p class="text-xl text-white/90 mb-12">
                     모바일 자동화의 미래를 이미 경험하고 있는 수천 명의 얼리어답터들과 함께하세요.
                 </p>
 
-                <div class="bg-card p-6 md:p-10 rounded-2xl shadow-lg">
+                <div class="glass-effect p-8 md:p-12 max-w-2xl mx-auto">
                     <form id="signup-form" class="space-y-6">
                         <div>
                             <input type="email" id="email-input" placeholder="이메일 주소를 입력해 주세요" required
-                                   class="w-full px-5 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-lg">
+                                   class="w-full px-6 py-4 border-0 rounded-2xl focus:outline-none focus:ring-4 focus:ring-white/30 text-lg bg-white/90 backdrop-blur">
                         </div>
                         <div>
                             <input type="tel" id="phone-input" placeholder="휴대폰 번호 (선택 사항)"
-                                   class="w-full px-5 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-lg">
+                                   class="w-full px-6 py-4 border-0 rounded-2xl focus:outline-none focus:ring-4 focus:ring-white/30 text-lg bg-white/90 backdrop-blur">
                         </div>
                         <div>
-                            <label for="referral-select" class="sr-only">어떻게 알게 되셨나요?</label>
                             <select id="referral-select"
-                                    class="w-full px-5 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-lg text-text_primary">
+                                    class="w-full px-6 py-4 border-0 rounded-2xl focus:outline-none focus:ring-4 focus:ring-white/30 text-lg bg-white/90 backdrop-blur text-gray-700">
                                 <option value="">어떻게 알게 되셨나요? (선택)</option>
                                 <option value="social_media">소셜 미디어</option>
                                 <option value="friend">지인 추천</option>
@@ -289,125 +547,157 @@
                                 <option value="other">기타</option>
                             </select>
                         </div>
-                        <button type="submit" class="w-full bg-signup_button_blue text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:opacity-90 transition duration-300 transform hover:scale-105 text-xl">
-                            사전 등록하기
+                        <button type="submit" class="w-full bg-white text-purple-600 font-bold py-4 px-8 rounded-2xl shadow-xl hover:bg-gray-50 transition duration-300 transform hover:scale-105 text-xl">
+                            🚀 사전 등록하기
                         </button>
                     </form>
 
-                    <div class="flex justify-center items-center mt-6 space-x-6 text-text_secondary text-sm">
+                    <div class="flex justify-center items-center mt-8 space-x-8 text-white/80 text-sm">
                         <div class="flex items-center">
-                            <!-- Checkmark SVG -->
-                            <svg class="w-4 h-4 mr-1 text-green-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4a1 1 0 000-1.414z" clip-rule="evenodd"></path></svg>
+                            <svg class="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4a1 1 0 000-1.414z" clip-rule="evenodd"></path>
+                            </svg>
                             스팸 없음
                         </div>
                         <div class="flex items-center">
-                            <!-- Plus/Circle SVG -->
-                            <svg class="w-4 h-4 mr-1 text-green-500" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm-1 14a1 1 0 102 0v-3h3a1 1 0 100-2h-3V8a1 1 0 10-2 0v3H8a1 1 0 100 2h3v3z" clip-rule="evenodd"></path>
+                            <svg class="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm-1 14a1 1 0 102 0v-3h3a1 1 0 100-2h-3V8a1 1 0 10-2 0v3H8a1 1 0 100 2h3v3z"></path>
                             </svg>
                             무료 가입
                         </div>
                         <div class="flex items-center">
-                            <!-- Star SVG -->
-                            <svg class="w-4 h-4 mr-1 text-yellow-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.92 8.709c-.783-.57-.381-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                            <svg class="w-5 h-5 mr-2 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.92 8.709c-.783-.57-.381-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
                             얼리 액세스
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 text-center">
-                        <div class="p-4 rounded-xl bg-card">
-                            <div class="text-3xl md:text-4xl font-bold text-primary">0</div>
-                            <div class="text-sm text-text_secondary mt-1">얼리 사용자</div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+                        <div class="text-center">
+                            <div class="text-4xl font-bold text-white mb-2" id="user-count">2,847</div>
+                            <div class="text-white/70">얼리 사용자</div>
                         </div>
-                        <div class="p-4 rounded-xl bg-card">
-                            <div class="text-3xl md:text-4xl font-bold text-primary">94%</div>
-                            <div class="text-sm text-text_secondary mt-1">만족도</div>
+                        <div class="text-center">
+                            <div class="text-4xl font-bold text-white mb-2">94%</div>
+                            <div class="text-white/70">만족도</div>
                         </div>
-                        <div class="p-4 rounded-xl bg-card">
-                            <div class="text-3xl md:text-4xl font-bold text-primary">15분</div>
-                            <div class="text-sm text-text_secondary mt-1">일일 절약 시간</div>
+                        <div class="text-center">
+                            <div class="text-4xl font-bold text-white mb-2">15분</div>
+                            <div class="text-white/70">일일 절약 시간</div>
                         </div>
                     </div>
 
-                    <div class="mt-12 p-6 rounded-xl text-center bg-signup_bonus_yellow text-signup_bonus_text">
-                        <h3 class="text-xl font-semibold mb-2">얼리 액세스 보너스</h3>
-                        <p class="text-base">사전 등록 시, 첫 1,000명 사용자에게 평생 프리미엄 기능과 우선 지원 혜택이 제공됩니다.</p>
+                    <div class="mt-12 glass-effect p-6 rounded-2xl text-center">
+                        <h3 class="text-2xl font-semibold mb-3 text-white">🎁 얼리 액세스 보너스</h3>
+                        <p class="text-white/90">사전 등록 시, 첫 1,000명 사용자에게 평생 프리미엄 기능과 우선 지원 혜택이 제공됩니다.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- FAQ Section -->
-        <section id="faq" class="bg-white py-16 md:py-24 px-4 sm:px-6 lg:px-8">
-            <div class="container mx-auto text-center max-w-3xl">
-                <h2 class="text-3xl md:text-4xl font-bold text-text_primary mb-12">궁금한 점이 있으신가요?</h2>
-                <div class="space-y-4 text-left">
-                    <!-- FAQ Item 1 -->
-                    <div class="faq-item bg-card rounded-xl shadow-md overflow-hidden">
-                        <button class="faq-question w-full p-6 flex justify-between items-center text-lg font-semibold text-text_primary hover:bg-gray-50 transition duration-300 focus:outline-none">
-                            ManoLab AI Agent는 어떤 앱들을 지원하나요?
-                            <svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        <!-- Enhanced FAQ Section -->
+        <section id="faq" class="bg-white py-20 md:py-32 px-4 sm:px-6 lg:px-8 section-fade-in">
+            <div class="container mx-auto text-center max-w-4xl">
+                <h2 class="text-4xl md:text-5xl font-bold text-text_primary mb-16">궁금한 점이 있으신가요?</h2>
+                <div class="space-y-6 text-left">
+                    <div class="faq-item glass-effect overflow-hidden hover:shadow-xl transition duration-300">
+                        <button class="faq-question w-full p-8 flex justify-between items-center text-xl font-semibold text-text_primary hover:bg-white/50 transition duration-300 focus:outline-none">
+                            <span>🤖 ManoLab AI Agent는 어떤 앱들을 지원하나요?</span>
+                            <svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
                         </button>
-                        <div class="faq-answer px-6 pb-6 text-text_secondary hidden">
-                            <p>초기 MVP 버전에서는 카카오톡, 네이버 지도, 스타벅스 앱과 같은 주요 앱 카테고리 또는 앱들을 지원합니다. 점차 지원 앱을 확장해 나갈 예정입니다.</p>
+                        <div class="faq-answer px-8 pb-8 text-text_secondary hidden">
+                            <p class="leading-relaxed">초기 MVP 버전에서는 카카오톡, 네이버 지도, 스타벅스 앱과 같은 주요 앱 카테고리 또는 앱들을 지원합니다. 점차 지원 앱을 확장해 나갈 예정입니다.</p>
                         </div>
                     </div>
-                    <!-- FAQ Item 2 -->
-                    <div class="faq-item bg-card rounded-xl shadow-md overflow-hidden">
-                        <button class="faq-question w-full p-6 flex justify-between items-center text-lg font-semibold text-text_primary hover:bg-gray-50 transition duration-300 focus:outline-none">
-                            개인 정보와 보안은 어떻게 관리되나요?
-                            <svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+
+                    <div class="faq-item glass-effect overflow-hidden hover:shadow-xl transition duration-300">
+                        <button class="faq-question w-full p-8 flex justify-between items-center text-xl font-semibold text-text_primary hover:bg-white/50 transition duration-300 focus:outline-none">
+                            <span>🔒 개인 정보와 보안은 어떻게 관리되나요?</span>
+                            <svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
                         </button>
-                        <div class="faq-answer px-6 pb-6 text-text_secondary hidden">
-                            <p>ManoLab은 사용자 정보 보호와 보안을 최우선으로 합니다. 모든 데이터는 최신 암호화 기술을 사용하여 안전하게 처리되며, 사용자의 명시적인 동의 없이 개인 정보가 외부로 유출되지 않습니다.</p>
+                        <div class="faq-answer px-8 pb-8 text-text_secondary hidden">
+                            <p class="leading-relaxed">ManoLab은 사용자 정보 보호와 보안을 최우선으로 합니다. 모든 데이터는 최신 암호화 기술을 사용하여 안전하게 처리되며, 사용자의 명시적인 동의 없이 개인 정보가 외부로 유출되지 않습니다.</p>
                         </div>
                     </div>
-                    <!-- FAQ Item 3 -->
-                    <div class="faq-item bg-card rounded-xl shadow-md overflow-hidden">
-                        <button class="faq-question w-full p-6 flex justify-between items-center text-lg font-semibold text-text_primary hover:bg-gray-50 transition duration-300 focus:outline-none">
-                            ManoLab은 언제 정식 출시되나요?
-                            <svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+
+                    <div class="faq-item glass-effect overflow-hidden hover:shadow-xl transition duration-300">
+                        <button class="faq-question w-full p-8 flex justify-between items-center text-xl font-semibold text-text_primary hover:bg-white/50 transition duration-300 focus:outline-none">
+                            <span>📅 ManoLab은 언제 정식 출시되나요?</span>
+                            <svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
                         </button>
-                        <div class="faq-answer px-6 pb-6 text-text_secondary hidden">
-                            <p>MVP 테스트를 통해 사용자 피드백을 적극 반영하여 2026년 상반기 정식 출시를 목표하고 있습니다. 테스트 참여자분들께는 가장 먼저 소식을 전해드립니다.</p>
+                        <div class="faq-answer px-8 pb-8 text-text_secondary hidden">
+                            <p class="leading-relaxed">MVP 테스트를 통해 사용자 피드백을 적극 반영하여 2026년 상반기 정식 출시를 목표하고 있습니다. 테스트 참여자분들께는 가장 먼저 소식을 전해드립니다.</p>
                         </div>
                     </div>
-                    <!-- FAQ Item 4 -->
-                    <div class="faq-item bg-card rounded-xl shadow-md overflow-hidden">
-                        <button class="faq-question w-full p-6 flex justify-between items-center text-lg font-semibold text-text_primary hover:bg-gray-50 transition duration-300 focus:outline-none">
-                            기존 AI 비서(Siri, Google Assistant 등)와 무엇이 다른가요?
-                            <svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+
+                    <div class="faq-item glass-effect overflow-hidden hover:shadow-xl transition duration-300">
+                        <button class="faq-question w-full p-8 flex justify-between items-center text-xl font-semibold text-text_primary hover:bg-white/50 transition duration-300 focus:outline-none">
+                            <span>🆚 기존 AI 비서와 무엇이 다른가요?</span>
+                            <svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
                         </button>
-                        <div class="faq-answer px-6 pb-6 text-text_secondary hidden">
-                            <p>기존 비서가 단일 앱 내 정보 검색이나 제한된 명령 수행에 초점을 맞춘다면, ManoLab은 여러 앱을 넘나들며 복잡하고 다단계적인 작업을 자율적으로 완료하는 데 특화되어 있습니다. 마치 실제 사람이 스마트폰을 조작하듯이 AI가 앱을 제어합니다.</p>
+                        <div class="faq-answer px-8 pb-8 text-text_secondary hidden">
+                            <p class="leading-relaxed">기존 비서가 단일 앱 내 정보 검색이나 제한된 명령 수행에 초점을 맞춘다면, ManoLab은 여러 앱을 넘나들며 복잡하고 다단계적인 작업을 자율적으로 완료하는 데 특화되어 있습니다. 마치 실제 사람이 스마트폰을 조작하듯이 AI가 앱을 제어합니다.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-gray-300 py-12 px-4 sm:px-6 lg:px-8">
-        <div class="container mx-auto text-center md:flex md:justify-between md:items-center">
-            <div class="mb-6 md:mb-0">
-                <p>&copy; 2025 ManoLab. All rights reserved.</p>
+    <!-- Enhanced Footer -->
+    <footer class="bg-gradient-to-r from-gray-900 to-black text-gray-300 py-16 px-4 sm:px-6 lg:px-8">
+        <div class="container mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="text-3xl font-bold text-white mb-4">ManoLab</div>
+                    <p class="text-gray-400 leading-relaxed">AI가 당신을 대신합니다.<br>당신의 시간은 소중하니까.</p>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold mb-4">제품</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white transition duration-300">AI Agent</a></li>
+                        <li><a href="#" class="hover:text-white transition duration-300">기능 소개</a></li>
+                        <li><a href="#" class="hover:text-white transition duration-300">가격 정책</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold mb-4">지원</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white transition duration-300">도움말</a></li>
+                        <li><a href="#" class="hover:text-white transition duration-300">문의하기</a></li>
+                        <li><a href="#" class="hover:text-white transition duration-300">커뮤니티</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold mb-4">법적 고지</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white transition duration-300">개인정보처리방침</a></li>
+                        <li><a href="#" class="hover:text-white transition duration-300">이용약관</a></li>
+                        <li><a href="mailto:contact@manolab.com" class="hover:text-white transition duration-300">contact@manolab.com</a></li>
+                    </ul>
+                </div>
             </div>
-            <div class="flex flex-col md:flex-row md:space-x-8 space-y-4 md:space-y-0">
-                <a href="#" class="hover:text-white transition duration-300">개인정보처리방침</a>
-                <a href="#" class="hover:text-white transition duration-300">이용약관</a>
-                <a href="mailto:contact@manolab.com" class="hover:text-white transition duration-300">contact@manolab.com</a>
-                <div class="flex justify-center md:justify-start space-x-4 mt-4 md:mt-0">
-                    <!-- Social Media Icons (placeholders) -->
-                    <a href="#" class="hover:text-white transition duration-300">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p>&copy; 2025 ManoLab. All rights reserved.</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.356-.012-.534A8.347 8.347 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.322 8.322 0 01-2.675 1.018 4.136 4.136 0 00-7.033 3.763 11.66 11.66 0 01-8.4-4.269 4.116 4.116 0 001.27 5.477A4.072 4.072 0 012 10.425v.053a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.12 4.12 0 003.834 2.85A8.233 8.233 0 012 18.188a11.644 11.644 0 006.29 1.84z"></path>
                         </svg>
                     </a>
-                    <a href="#" class="hover:text-white transition duration-300">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path fill-rule="evenodd" d="M12.984 0H11.016A11.016 11.016 0 000 11.016v1.968A11.016 11.016 0 0011.016 24h1.968A11.016 11.016 0 0024 12.984V11.016A11.016 11.016 0 0012.984 0zM7.5 17.25h-2.5V9.75h2.5V17.25zM6.25 8.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM18.5 17.25h-2.5v-3.5c0-.85-.15-1.7-1.15-1.7s-1.05.85-1.05 1.7v3.5h-2.5V9.75h2.5v1.25a2.5 2.5 0 012.2-1.25c2.4 0 2.8 2.3 2.8 5.75v1.75z" clip-rule="evenodd"></path>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"></path>
                         </svg>
                     </a>
                 </div>
@@ -415,144 +705,731 @@
         </div>
     </footer>
 
-    <script>
+    <script>  
+        // Enhanced JavaScript with new simulation features
+
         // Mobile Menu Toggle
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
-        const closeMobileMenuButton = document.getElementById('close-mobile-menu');
 
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.remove('hidden');
-            document.body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
-        });
-
-        closeMobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.add('hidden');
-            document.body.style.overflow = ''; // Restore scrolling
-        });
+        if (mobileMenuButton) {
+            mobileMenuButton.addEventListener('click', () => {
+                // Create mobile menu if it doesn't exist
+                let menu = document.getElementById('mobile-menu');
+                if (!menu) {
+                    menu = document.createElement('div');
+                    menu.id = 'mobile-menu';
+                    menu.className = 'fixed inset-0 bg-gradient-to-br from-purple-900/95 to-pink-900/95 backdrop-blur-lg z-50 flex flex-col items-center justify-center space-y-8 text-2xl';
+                    menu.innerHTML = `
+                        <button id="close-mobile-menu" class="absolute top-8 right-8 p-2 rounded-full bg-white/20 text-white hover:bg-white/30 transition duration-300">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                        <a href="#signup" class="bg-white text-purple-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition duration-300" onclick="closeMobileMenu()">사전 신청</a>
+                    `;
+                    document.body.appendChild(menu);
+                    
+                    // Add close functionality
+                    document.getElementById('close-mobile-menu').addEventListener('click', closeMobileMenu);
+                }
+                menu.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            });
+        }
 
         function closeMobileMenu() {
-            mobileMenu.classList.add('hidden');
-            document.body.style.overflow = '';
-        }
-
-        // Like Button functionality
-        const likeButton = document.getElementById('like-button');
-        const likeCount = document.getElementById('like-count');
-        let currentLikes = 0; // Initialize with 0, or load from localStorage if persistence is desired
-
-        // Try to load like count from local storage
-        if (localStorage.getItem('manolab_likes')) {
-            currentLikes = parseInt(localStorage.getItem('manolab_likes'));
-        } else {
-            // Set initial random likes for demonstration purposes, as per image (e.g., 1234)
-            currentLikes = 1234;
-            localStorage.setItem('manolab_likes', currentLikes);
-        }
-        likeCount.textContent = currentLikes.toLocaleString();
-
-        likeButton.addEventListener('click', () => {
-            currentLikes++;
-            likeCount.textContent = currentLikes.toLocaleString();
-            localStorage.setItem('manolab_likes', currentLikes); // Save to local storage
-            // In a real app, this would send data to a backend
-        });
-
-        // Demo Simulation functionality
-        const commandInput = document.getElementById('command-input');
-        const micButton = document.getElementById('mic-button');
-        const simulationOutput = document.getElementById('simulation-output');
-
-        const simulateCommand = () => {
-            const command = commandInput.value.trim();
-            if (command === '') {
-                simulationOutput.textContent = '명령어를 입력하여 AI의 동작을 시뮬레이션해보세요!';
-                simulationOutput.classList.remove('active');
-                return;
+            const menu = document.getElementById('mobile-menu');
+            if (menu) {
+                menu.classList.add('hidden');
+                document.body.style.overflow = '';
             }
+        }
 
-            simulationOutput.classList.add('active');
-            simulationOutput.innerHTML = `AI가 "${command}" 명령을 이해하고 있습니다. <br><span class="inline-block animate-bounce-custom">.</span><span class="inline-block animate-bounce-custom delay-100">.</span><span class="inline-block animate-bounce-custom delay-200">.</span>`;
+        // New Simulation System
+        const heroChatInput = document.getElementById('hero-chat-input');
+        const heroSendButton = document.getElementById('hero-send-button');
+        const heroChatContainer = document.getElementById('hero-chat-container');
 
-            setTimeout(() => {
-                simulationOutput.innerHTML = `AI가 "${command}" 명령을 성공적으로 수행했습니다! 🎉<br>잠시 후 결과를 확인해 주세요.`;
-            }, 2000); // Simulate processing time
-
-            setTimeout(() => {
-                simulationOutput.innerHTML = '데모 완료! 실제 앱에서 ManoLab이 어떻게 작동할지 상상해 보세요.';
-                simulationOutput.classList.remove('active');
-            }, 5000);
+        // Simulation scenarios data
+        const simulationScenarios = {
+            '스타벅스': {
+                keywords: ['스타벅스', '커피', '아메리카노', '카페', '라떼'],
+                steps: [
+                    {
+                        type: 'analysis',
+                        message: 'ManoLab AI가 사용자의 명령을 분석하고 "스타벅스 앱"을 실행합니다...',
+                        delay: 2000,
+                        bgColor: 'bg-blue-50'
+                    },
+                    {
+                        type: 'question',
+                        message: 'ManoLab AI가 "스타벅스 앱"을 실행합니다. 늘 주문하시던 "강남역점"에서 "개인컵"으로 "아이스 아메리카노 톨 사이즈"를 "스타벅스 카드"로 결제할까요? ("응" 또는 "아니"로 답변해주세요.)',
+                        delay: 1000,
+                        bgColor: 'bg-yellow-50',
+                        waitForUser: true
+                    },
+                    {
+                        type: 'processing',
+                        message: 'ManoLab AI가 "스타벅스 앱"에서 결제를 진행합니다...',
+                        delay: 3000,
+                        bgColor: 'bg-purple-50'
+                    },
+                    {
+                        type: 'success',
+                        message: 'AI가 성공적으로 작업을 완료했습니다! 🎉\n"강남역점" 스타벅스 아이스 아메리카노 주문이 완료되었습니다. 예상 픽업 시간: 10분 후.',
+                        delay: 1000,
+                        bgColor: 'bg-green-50'
+                    }
+                ]
+            },
+            '배송': {
+                keywords: ['배송', '택배', '옷', '쿠팡', '배송지', '회사'],
+                steps: [
+                    {
+                        type: 'analysis',
+                        message: 'ManoLab AI가 사용자의 명령을 분석하고 "쿠팡 앱"을 실행합니다...',
+                        delay: 2000,
+                        bgColor: 'bg-blue-50'
+                    },
+                    {
+                        type: 'question',
+                        message: 'ManoLab AI가 "쿠팡 앱"을 실행합니다. 배송지를 기존 주소에서 "강남구 테헤란로 15, ManoLab 오피스"로 변경하고 배송 현황을 조회할까요? ("응" 또는 "아니"로 답변해주세요.)',
+                        delay: 1000,
+                        bgColor: 'bg-yellow-50',
+                        waitForUser: true
+                    },
+                    {
+                        type: 'processing',
+                        message: 'ManoLab AI가 "쿠팡 앱"에서 배송지 변경 및 배송 현황을 조회합니다...',
+                        delay: 4000,
+                        bgColor: 'bg-purple-50'
+                    },
+                    {
+                        type: 'success',
+                        message: 'AI가 성공적으로 작업을 완료했습니다! 🎉\n주문하신 옷의 배송지가 "ManoLab 오피스"로 변경되었으며, 현재 "강남 물류센터"에서 출고되어 오늘 오후 늦게 배송될 예정입니다.',
+                        delay: 1000,
+                        bgColor: 'bg-green-50'
+                    }
+                ]
+            },
+            '병원': {
+                keywords: ['병원', '진료', '예약', '피부과', '의사', '비대면'],
+                steps: [
+                    {
+                        type: 'analysis',
+                        message: 'ManoLab AI가 사용자의 명령을 분석하고 "닥터나우 앱"을 실행합니다...',
+                        delay: 2000,
+                        bgColor: 'bg-blue-50'
+                    },
+                    {
+                        type: 'question',
+                        message: 'ManoLab AI가 "닥터나우 앱"을 실행합니다. "브라이언 윤"님의 계정으로 오늘 저녁 7시 "피부과" 전문의 "김미영 의사"에게 비대면 진료를 예약할까요? ("응" 또는 "아니"로 답변해주세요.)',
+                        delay: 1000,
+                        bgColor: 'bg-yellow-50',
+                        waitForUser: true
+                    },
+                    {
+                        type: 'processing',
+                        message: 'ManoLab AI가 "닥터나우 앱"에서 진료 예약을 진행합니다...',
+                        delay: 3000,
+                        bgColor: 'bg-purple-50'
+                    },
+                    {
+                        type: 'success',
+                        message: 'AI가 성공적으로 작업을 완료했습니다! 🎉\n오늘 저녁 7시 "김미영 의사"와의 피부과 비대면 진료 예약이 완료되었습니다. 진료 10분 전 알림을 드릴까요?',
+                        delay: 1000,
+                        bgColor: 'bg-green-50',
+                        hasFollowUp: true
+                    },
+                    {
+                        type: 'success',
+                        message: 'ManoLab AI가 알림 설정을 완료했습니다.',
+                        delay: 1000,
+                        bgColor: 'bg-green-50'
+                    }
+                ]
+            },
+            '음식': {
+                keywords: ['배달', '치킨', '피자', '음식', '배달의민족', '요기요'],
+                steps: [
+                    {
+                        type: 'analysis',
+                        message: 'ManoLab AI가 사용자의 명령을 분석하고 "배달의민족 앱"을 실행합니다...',
+                        delay: 2000,
+                        bgColor: 'bg-blue-50'
+                    },
+                    {
+                        type: 'question',
+                        message: 'ManoLab AI가 "배달의민족 앱"을 실행합니다. 평소 즐겨드시는 "교촌치킨"에서 "허니콤보 + 콜라"를 주문할까요? ("응" 또는 "아니"로 답변해주세요.)',
+                        delay: 1000,
+                        bgColor: 'bg-yellow-50',
+                        waitForUser: true
+                    },
+                    {
+                        type: 'processing',
+                        message: 'ManoLab AI가 "배달의민족 앱"에서 주문을 진행합니다...',
+                        delay: 3000,
+                        bgColor: 'bg-purple-50'
+                    },
+                    {
+                        type: 'success',
+                        message: 'AI가 성공적으로 작업을 완료했습니다! 🎉\n교촌치킨 허니콤보 주문이 완료되었습니다. 예상 배달 시간: 35분 후.',
+                        delay: 1000,
+                        bgColor: 'bg-green-50'
+                    }
+                ]
+            },
+            '택시': {
+                keywords: ['택시', '우버', '카카오택시', '타다', '이동', '집', '회사', '호출출'],
+                steps: [
+                    {
+                        type: 'analysis',
+                        message: 'ManoLab AI가 사용자의 명령을 분석하고 "카카오 T 앱"을 실행합니다...',
+                        delay: 2000,
+                        bgColor: 'bg-blue-50'
+                    },
+                    {
+                        type: 'question',
+                        message: 'ManoLab AI가 "카카오 T 앱"을 실행합니다. 현재 위치에서 "강남구 테헤란로 15, ManoLab 오피스"까지 일반 택시를 호출할까요? (예상 요금: 8,500원) ("응" 또는 "아니"로 답변해주세요.)',
+                        delay: 1000,
+                        bgColor: 'bg-yellow-50',
+                        waitForUser: true
+                    },
+                    {
+                        type: 'processing',
+                        message: 'ManoLab AI가 "카카오 T 앱"에서 택시를 호출합니다...',
+                        delay: 4000,
+                        bgColor: 'bg-purple-50'
+                    },
+                    {
+                        type: 'success',
+                        message: 'AI가 성공적으로 작업을 완료했습니다! 🎉\n택시가 호출되었습니다. 기사님이 3분 후 도착 예정입니다. (차량번호: 서울12가1234)',
+                        delay: 1000,
+                        bgColor: 'bg-green-50'
+                    }
+                ]
+            }
         };
 
-        commandInput.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter') {
-                simulateCommand();
+        // Message type styles
+        const messageStyles = {
+            user: {
+                icon: '👤',
+                bgClass: 'bg-gray-100 text-gray-800',
+                align: 'ml-auto'
+            },
+            analysis: {
+                icon: '🔍',
+                bgClass: 'bg-blue-100 text-blue-800',
+                align: 'mr-auto'
+            },
+            question: {
+                icon: '❓',
+                bgClass: 'bg-yellow-100 text-yellow-800',
+                align: 'mr-auto'
+            },
+            processing: {
+                icon: '⚙️',
+                bgClass: 'bg-purple-100 text-purple-800',
+                align: 'mr-auto'
+            },
+            success: {
+                icon: '✅',
+                bgClass: 'bg-green-100 text-green-800',
+                align: 'mr-auto'
+            }
+        };
+
+        // Current scenario state
+        let currentScenario = null;
+        let currentStepIndex = 0;
+        let isWaitingForUser = false;
+
+        // Add message function
+        function addMessage(text, type = 'user', animate = true) {
+            const style = messageStyles[type];
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex mb-4 ${animate ? 'opacity-0' : ''}`;
+            
+            messageDiv.innerHTML = `
+                <div class="max-w-xs lg:max-w-md px-4 py-3 rounded-2xl ${style.bgClass} ${style.align}">
+                    <div class="flex items-start space-x-2">
+                        <span class="text-lg">${style.icon}</span>
+                        <div class="text-sm leading-relaxed whitespace-pre-line">${text}</div>
+                    </div>
+                </div>
+            `;
+            
+            heroChatContainer.appendChild(messageDiv);
+            
+            if (animate) {
+                setTimeout(() => {
+                    messageDiv.classList.remove('opacity-0');
+                    messageDiv.classList.add('transition-opacity', 'duration-500');
+                }, 100);
+            }
+            
+            heroChatContainer.scrollTop = heroChatContainer.scrollHeight;
+        }
+
+        // Find scenario function
+        function findScenario(userInput) {
+            const input = userInput.toLowerCase();
+            
+            // Check for more specific keywords first
+            for (const [key, scenario] of Object.entries(simulationScenarios)) {
+                // For taxi scenario, check for specific taxi keywords
+                if (key === '택시' && (input.includes('택시') || input.includes('호출') || input.includes('카카오'))) {
+                    return key;
+                }
+                
+                // For delivery scenario, check for specific delivery keywords  
+                if (key === '배송' && (input.includes('배송') || input.includes('택배') || input.includes('쿠팡')) && !input.includes('택시') && !input.includes('호출')) {
+                    return key;
+                }
+                
+                // For other scenarios, use original logic
+                if (key !== '택시' && key !== '배송' && scenario.keywords.some(keyword => input.includes(keyword))) {
+                    return key;
+                }
+            }
+            return null;
+        }
+        // Run scenario function
+        async function runScenario(scenarioKey) {
+            currentScenario = simulationScenarios[scenarioKey];
+            currentStepIndex = 0;
+            
+            for (let i = 0; i < currentScenario.steps.length; i++) {
+                const step = currentScenario.steps[i];
+                currentStepIndex = i;
+                
+                if (step.waitForUser) {
+                    isWaitingForUser = true;
+                }
+                
+                await new Promise(resolve => {
+                    setTimeout(() => {
+                        addMessage(step.message, step.type);
+                        heroChatContainer.className = heroChatContainer.className.replace(/bg-\w+-50/g, '') + ` ${step.bgColor}`;
+                        
+                        if (step.waitForUser) {
+                            // Wait for user response
+                            resolve();
+                        } else if (step.hasFollowUp && i === currentScenario.steps.length - 2) {
+                            // Automatically add "응" response
+                            setTimeout(() => {
+                                addMessage('응', 'user');
+                                setTimeout(() => {
+                                    resolve();
+                                }, 500);
+                            }, 2000);
+                        } else {
+                            resolve();
+                        }
+                    }, step.delay);
+                });
+                
+                if (step.waitForUser) {
+                    break; // Wait for user input
+                }
+            }
+            
+            // If scenario completed without waiting for user, reset after delay
+            if (!isWaitingForUser) {
+                setTimeout(() => {
+                    resetToInitialScreen();
+                }, 4000);
+            }
+        }
+
+        // Handle user response function
+        async function handleUserResponse(input) {
+            if (!isWaitingForUser || !currentScenario) return false;
+            
+            const response = input.toLowerCase().trim();
+            if (response === '응' || response === '네' || response === 'yes' || response === 'y') {
+                isWaitingForUser = false;
+                currentStepIndex++;
+                
+                // Execute remaining steps
+                for (let i = currentStepIndex; i < currentScenario.steps.length; i++) {
+                    const step = currentScenario.steps[i];
+                    
+                    await new Promise(resolve => {
+                        setTimeout(() => {
+                            addMessage(step.message, step.type);
+                            heroChatContainer.className = heroChatContainer.className.replace(/bg-\w+-50/g, '') + ` ${step.bgColor}`;
+                            
+                            if (step.hasFollowUp && i === currentScenario.steps.length - 2) {
+                                // Automatically add "응" response
+                                setTimeout(() => {
+                                    addMessage('응', 'user');
+                                    setTimeout(() => {
+                                        resolve();
+                                    }, 500);
+                                }, 2000);
+                            } else {
+                                resolve();
+                            }
+                        }, step.delay);
+                    });
+                }
+                
+                currentScenario = null;
+                
+                // Reset to initial screen after completion
+                setTimeout(() => {
+                    resetToInitialScreen();
+                }, 4000);
+                
+                return true;
+            } else if (response === '아니' || response === '아니요' || response === 'no' || response === 'n') {
+                isWaitingForUser = false;
+                currentScenario = null;
+                
+                setTimeout(() => {
+                    addMessage('AI가 작업을 종료합니다.', 'analysis');
+                    heroChatContainer.className = heroChatContainer.className.replace(/bg-\w+-50/g, '') + ' bg-gray-50';
+                    
+                    // Reset to initial screen after cancellation
+                    setTimeout(() => {
+                        resetToInitialScreen();
+                    }, 3000);
+                }, 1000);
+                
+                return true;
+            }
+            
+            return false;
+        }
+
+        // Reset to initial screen function
+        function resetToInitialScreen() {
+            heroChatContainer.innerHTML = `
+                <div class="text-center text-gray-500 py-8">
+                    <div class="text-4xl mb-4">🤖</div>
+                    <p class="text-lg font-medium">명령어를 입력하여 AI의 동작을 시뮬레이션해보세요!</p>
+                    <div class="mt-4 text-sm text-gray-400 space-y-1">
+                        <p>💡 <strong>추천 명령어:</strong></p>
+                        <p class="cursor-pointer hover:text-blue-500 transition duration-200">"스타벅스에서 늘 마시던 아이스 아메리카노 주문해 줘"</p>
+                        <p class="cursor-pointer hover:text-blue-500 transition duration-200">"방금 주문한 옷, 배송지를 회사로 바꾸고 어디쯤 오는지 알려줘"</p>
+                        <p class="cursor-pointer hover:text-blue-500 transition duration-200">"오늘 저녁에 비대면 진료로 피부과 의사 예약해 줘"</p>
+                        <p class="cursor-pointer hover:text-blue-500 transition duration-200">"교촌치킨 허니콤보 배달 주문해 줘"</p>
+                        <p class="cursor-pointer hover:text-blue-500 transition duration-200">"회사까지 택시 호출해 줘"</p>
+                    </div>
+                </div>
+            `;
+            heroChatContainer.className = 'bg-gray-50 rounded-2xl p-6 mb-4 h-80 overflow-y-auto';
+            currentScenario = null;
+            currentStepIndex = 0;
+            isWaitingForUser = false;
+        }
+
+        // Handle chat input function
+        async function handleChatInput() {
+            const input = heroChatInput.value.trim();
+            if (!input) return;
+            
+            // Add user message
+            addMessage(input, 'user');
+            heroChatInput.value = '';
+            
+            // Remove welcome message if present
+            if (heroChatContainer.querySelector('.text-center')) {
+                heroChatContainer.innerHTML = '';
+                addMessage(input, 'user', false);
+            }
+            
+            // Check if waiting for user response
+            if (isWaitingForUser) {
+                const handled = await handleUserResponse(input);
+                if (handled) return;
+            }
+            
+            // Find new scenario
+            const scenarioKey = findScenario(input);
+            if (scenarioKey) {
+                await runScenario(scenarioKey);
+            } else {
+                // Default response
+                setTimeout(() => {
+                    addMessage('죄송합니다. 해당 명령을 이해하지 못했습니다. 추천 명령어를 사용해보세요!', 'analysis');
+                    
+                    // Reset to initial screen after 3 seconds
+                    setTimeout(() => {
+                        resetToInitialScreen();
+                    }, 3000);
+                }, 1500);
+            }
+        }
+
+        // Event listeners for chat
+        if (heroSendButton) {
+            heroSendButton.addEventListener('click', handleChatInput);
+        }
+
+        if (heroChatInput) {
+            heroChatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    handleChatInput();
+                }
+            });
+        }
+
+        // Click on recommended commands
+        heroChatContainer.addEventListener('click', (e) => {
+            if (e.target.tagName === 'P' && e.target.textContent.includes('"')) {
+                const command = e.target.textContent.match(/"([^"]+)"/);
+                if (command) {
+                    heroChatInput.value = command[1];
+                    handleChatInput();
+                }
             }
         });
-        micButton.addEventListener('click', simulateCommand);
 
+        // Scroll to demo function
+        function scrollToDemo() {
+            const demoSection = document.getElementById('how-it-works') || document.getElementById('why-manolab');
+            if (demoSection) {
+                demoSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
 
-        // FAQ Accordion functionality
+        // Enhanced FAQ Accordion
         const faqQuestions = document.querySelectorAll('.faq-question');
-
         faqQuestions.forEach(question => {
             question.addEventListener('click', () => {
                 const answer = question.nextElementSibling;
                 const icon = question.querySelector('svg');
+                const isOpen = !answer.classList.contains('hidden');
 
-                // Close other open answers
+                // Close all other answers
                 faqQuestions.forEach(otherQuestion => {
                     if (otherQuestion !== question) {
                         const otherAnswer = otherQuestion.nextElementSibling;
                         const otherIcon = otherQuestion.querySelector('svg');
-                        if (!otherAnswer.classList.contains('hidden')) {
-                            otherAnswer.classList.add('hidden');
-                            otherQuestion.setAttribute('aria-expanded', 'false');
-                            otherIcon.classList.remove('rotate-180');
-                        }
+                        otherAnswer.classList.add('hidden');
+                        otherIcon.classList.remove('rotate-180');
                     }
                 });
 
                 // Toggle current answer
-                answer.classList.toggle('hidden');
-                const isExpanded = !answer.classList.contains('hidden');
-                question.setAttribute('aria-expanded', isExpanded);
-                icon.classList.toggle('rotate-180', isExpanded);
+                if (isOpen) {
+                    answer.classList.add('hidden');
+                    icon.classList.remove('rotate-180');
+                } else {
+                    answer.classList.remove('hidden');
+                    icon.classList.add('rotate-180');
+                }
             });
         });
 
-        // Form Submission (client-side only for this demo)
+        // Enhanced Form Submission
         const signupForm = document.getElementById('signup-form');
-        signupForm.addEventListener('submit', (event) => {
-            event.preventDefault(); // Prevent actual form submission
-            const email = document.getElementById('email-input').value;
-            const phone = document.getElementById('phone-input').value;
-            const referral = document.getElementById('referral-select').value;
+        if (signupForm) {
+            signupForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const email = document.getElementById('email-input').value;
+                const phone = document.getElementById('phone-input').value;
+                const referral = document.getElementById('referral-select').value;
 
-            // In a real application, this data would be sent to a backend server.
-            console.log('--- 사전 등록 정보 ---');
-            console.log('이메일:', email);
-            console.log('휴대폰 번호:', phone || '미입력');
-            console.log('알게 된 경로:', referral || '미입력');
-            console.log('--------------------');
+                // Create success modal
+                const modal = document.createElement('div');
+                modal.className = 'fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4';
+                modal.innerHTML = `
+                    <div class="glass-effect p-8 rounded-3xl text-center max-w-md mx-auto transform animate-fade-in-up">
+                        <div class="w-20 h-20 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-3xl font-bold text-white mb-4">🎉 등록 완료!</h3>
+                        <p class="text-white/90 mb-6 leading-relaxed">
+                            ManoLab MVP 테스트에 성공적으로 등록되었습니다!<br>
+                            곧 최신 소식을 전해드릴게요.
+                        </p>
+                        <button id="close-modal" class="bg-white text-purple-600 font-bold py-3 px-8 rounded-2xl hover:bg-gray-50 transition duration-300">
+                            확인
+                        </button>
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
+                document.body.style.overflow = 'hidden';
 
-            // Show a simple confirmation message instead of alert()
-            const confirmationMessage = document.createElement('div');
-            confirmationMessage.className = 'fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50';
-            confirmationMessage.innerHTML = `
-                <div class="bg-white p-8 rounded-lg shadow-xl text-center max-w-sm mx-auto">
-                    <h3 class="text-2xl font-bold text-primary mb-4">사전 등록 완료! 🎉</h3>
-                    <p class="text-text_secondary mb-6">ManoLab MVP 테스트에 성공적으로 등록되었습니다.<br>최신 소식을 가장 먼저 받아보세요!</p>
-                    <button id="close-confirmation" class="bg-primary text-white font-bold py-3 px-6 rounded-lg hover:bg-secondary transition duration-300">확인</button>
-                </div>
-            `;
-            document.body.appendChild(confirmationMessage);
+                // Update user count
+                const userCountEl = document.getElementById('user-count');
+                const heroUserCountEl = document.getElementById('hero-user-count');
+                if (userCountEl) {
+                    const currentCount = parseInt(userCountEl.textContent.replace(',', ''));
+                    userCountEl.textContent = (currentCount + 1).toLocaleString();
+                }
+                if (heroUserCountEl) {
+                    const currentCount = parseInt(heroUserCountEl.textContent.replace(',', ''));
+                    heroUserCountEl.textContent = (currentCount + 1).toLocaleString();
+                }
 
-            document.getElementById('close-confirmation').addEventListener('click', () => {
-                document.body.removeChild(confirmationMessage);
-                signupForm.reset(); // Clear the form
+                document.getElementById('close-modal').addEventListener('click', () => {
+                    document.body.removeChild(modal);
+                    document.body.style.overflow = '';
+                    signupForm.reset();
+                });
+
+                console.log('사전 등록:', { email, phone, referral });
+            });
+        }
+
+        // Scroll Animation Observer
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections with fade-in class
+        document.querySelectorAll('.section-fade-in').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+                closeMobileMenu();
             });
         });
+
+        // Dynamic stats counter animation
+        function animateCounter(element, target, duration = 2000, prefix = '', suffix = '') {
+            let start = 0;
+            const startTime = performance.now();
+            
+            function updateCounter(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Easing function for smooth animation
+                const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+                const current = Math.floor(start + (target - start) * easeOutQuart);
+                
+                // Format number with commas
+                const formattedNumber = current.toLocaleString();
+                element.textContent = `${prefix}${formattedNumber}${suffix}`;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateCounter);
+                }
+            }
+            
+            requestAnimationFrame(updateCounter);
+        }
+
+        // Trigger animations when hero section is visible
+        const heroSection = document.getElementById('intro');
+        if (heroSection) {
+            const heroObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Animate task counter 
+                        const taskEl = document.getElementById('hero-task-counter');
+                        if (taskEl && !taskEl.dataset.animated) {
+                            animateCounter(taskEl, 1247, 2500, '', '');
+                            taskEl.dataset.animated = 'true';
+                        }
+                        heroObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.3 });
+
+            heroObserver.observe(heroSection);
+        }
+
+        // Optional: Live counter that keeps increasing (for demo effect)
+        function startLiveCounter() {
+            const taskEl = document.getElementById('hero-task-counter');
+            if (taskEl) {
+                setInterval(() => {
+                    const currentValue = parseInt(taskEl.textContent.replace(/[^0-9]/g, ''));
+                    if (currentValue < 2000) {
+                        taskEl.textContent = (currentValue + 1).toLocaleString();
+                    }
+                }, 3000); // Increase every 3 seconds
+            }
+        }
+
+        // Uncomment the line below if you want a continuously increasing counter
+        startLiveCounter();
+
+        // Trigger counter animations when signup section is visible
+        const signupSection = document.getElementById('signup');
+        if (signupSection) {
+            const signupObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const userCountEl = document.getElementById('user-count');
+                        if (userCountEl && !userCountEl.dataset.animated) {
+                            animateCounter(userCountEl, 2847);
+                            userCountEl.dataset.animated = 'true';
+                        }
+                        signupObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            signupObserver.observe(signupSection);
+        }
+
+        // Add floating particles effect
+        function createFloatingParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'fixed w-2 h-2 bg-white/20 rounded-full pointer-events-none z-0';
+            particle.style.left = Math.random() * window.innerWidth + 'px';
+            particle.style.top = window.innerHeight + 'px';
+            particle.style.animation = `float ${Math.random() * 3 + 4}s linear forwards`;
+            
+            document.body.appendChild(particle);
+            
+            setTimeout(() => {
+                particle.remove();
+            }, 7000);
+        }
+
+        // Create particles periodically
+        setInterval(createFloatingParticle, 3000);
+
+        // Add CSS for particle animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes float {
+                to {
+                    transform: translateY(-${window.innerHeight + 100}px) rotate(360deg);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        console.log('🚀 Enhanced ManoLab landing page loaded successfully!');   
     </script>
 </body>
 </html>
